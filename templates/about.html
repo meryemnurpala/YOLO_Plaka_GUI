@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hakkında - YOLO Plaka Tanıma Sistemi</title>
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- TailwindCSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            background: 
+                linear-gradient(135deg, rgba(237,234,255,0.18) 0%, rgba(224,236,255,0.18) 100%),
+                url('/static/istanbul.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .glass {
+            background: rgba(255,255,255,0.92);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 1.5rem;
+            color: #232946 !important;
+        }
+        .about-card {
+            max-width: 700px;
+            margin: 3rem auto 0 auto;
+            padding: 2.5rem 2rem;
+        }
+        nav span, nav a, nav i {
+            color: #232946 !important;
+        }
+        .dark body {
+            background: 
+                linear-gradient(135deg, rgba(34,34,54,0.25) 0%, rgba(26,26,46,0.25) 100%),
+                url('/static/istanbul.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .dark .glass, .dark .about-card, .dark .glass *, .dark nav span, .dark nav a, .dark nav i {
+            color: #232946 !important;
+        }
+    </style>
+    <script>
+      function toggleDarkMode() {
+        document.documentElement.classList.toggle('dark');
+        localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
+      }
+      window.onload = function() {
+        if(localStorage.getItem('darkMode') === 'true') {
+          document.documentElement.classList.add('dark');
+        }
+      }
+    </script>
+</head>
+<body class="flex flex-col min-h-screen">
+    <!-- Navbar -->
+    <nav class="w-full flex items-center justify-between px-4 py-3 glass mt-4 mx-auto max-w-4xl">
+      <div class="flex items-center gap-2">
+        <i class="fa-solid fa-car text-purple-600 text-2xl"></i>
+        <span class="font-bold text-lg md:text-xl tracking-wide text-gray-800 dark:text-white">Plaka Tanıma</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="/" class="text-gray-700 dark:text-gray-200 font-medium hover:text-purple-600 transition">Ana Sayfa</a>
+        <a href="/about" class="text-gray-700 dark:text-gray-200 font-medium hover:text-purple-600 transition">Hakkında</a>
+        <button onclick="toggleDarkMode()" class="ml-2 p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition" title="Dark Mode">
+          <i class="fa-solid fa-moon text-gray-500 dark:text-yellow-300"></i>
+        </button>
+      </div>
+    </nav>
+    <div class="glass about-card mt-8">
+        <h1 class="text-center mb-4 text-3xl font-bold">Hakkında</h1>
+        <p class="mb-4"><b>YOLO Plaka Tanıma Sistemi</b>, araç plakalarını hızlı ve yüksek doğrulukla tespit etmek için geliştirilmiş bir yapay zeka uygulamasıdır. Sistem, <b>YOLOv8</b> mimarisi ve transfer learning yöntemiyle eğitilmiş özel bir model kullanır.</p>
+        <ul class="mb-4">
+            <li><b>Doğruluk Oranı:</b> %97+</li>
+            <li><b>Ortalama İşlem Süresi:</b> 0.2 saniye</li>
+            <li><b>Model:</b> YOLOv8 Nano</li>
+            <li><b>Kullanım Kolaylığı:</b> Sürükle-bırak veya tek tıkla yükleme</li>
+            <li><b>Mobil Uyum:</b> Tüm cihazlarda sorunsuz çalışır</li>
+            <li><b>Açık Kaynak:</b> Kodlar tamamen erişilebilir</li>
+        </ul>
+        <p>Sistem, Python, Flask, Bootstrap ve Ultralytics YOLOv8 kütüphanesi ile geliştirilmiştir. Model, çeşitli plaka görüntüleriyle transfer learning yöntemiyle eğitilmiştir.</p>
+        <p class="mt-4"><b>Geliştirici:</b> <span style="color:#6a11cb;">meryemnur pala</span></p>
+    </div>
+</body>
+</html> 

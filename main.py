@@ -33,13 +33,14 @@ if __name__ == "__main__":
 MODEL_PATH = "runs/detect/train2/weights/best.pt"
 model = YOLO(MODEL_PATH)
 
+#tahmin yapma
 def predict_image(img_path):
     results = model(img_path)
     # Sonuç görselini kaydet
     result_img_path = "result.jpg"
     results[0].save(filename=result_img_path)
     return result_img_path
-
+#görsel seçme
 def open_image():
     file_path = filedialog.askopenfilename(filetypes=[("Image files", "*.jpg;*.jpeg;*.png")])
     if not file_path:

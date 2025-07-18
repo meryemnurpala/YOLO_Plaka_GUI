@@ -1,41 +1,111 @@
-# YOLOv8 Plaka Tespit GUI
+# YOLO Plaka Tanıma Web Arayüzü
 
-Bu proje, YOLOv8 modeli kullanarak görsel üzerinde plaka tespiti yapan basit bir Python ve Tkinter tabanlı grafik arayüz uygulamasıdır. Kullanıcı, bir görsel seçip model ile tespit işlemini gerçekleştirebilir ve sonucu arayüzde görebilir.
+Bu proje, YOLOv8 tabanlı araç plaka tanıma için modern ve kullanıcı dostu bir web arayüzü sunar.
 
 ## Özellikler
-- Eğitilmiş YOLOv8 modeli ile görsel üzerinde tespit
-- Basit ve kullanıcı dostu grafik arayüz (Tkinter)
-- Görsel seçip sonucu anında görüntüleme
-
-## Gereksinimler
-- Python 3.8+
-- [Ultralytics YOLO](https://docs.ultralytics.com/) (`ultralytics`)
-- OpenCV (`opencv-python`)
-- Pillow (`Pillow`)
-
-Gereksinimleri yüklemek için:
-```bash
-pip install ultralytics opencv-python Pillow
-```
+- Flask tabanlı web sunucu
+- Modern ve responsive arayüz (TailwindCSS, FontAwesome, Poppins)
+- İstanbul arka planı ve karanlık mod desteği
+- Plaka tespiti sonrası görsel karşılaştırma
+- Toplam tespit sayacı
 
 ## Kullanım
-1. Eğitilmiş YOLOv8 model ağırlık dosyanızın `runs/detect/train2/weights/best.pt` konumunda olduğundan emin olun veya `main.py` dosyasındaki yolu güncelleyin.
-2. Uygulamayı başlatmak için:
-```bash
-python main.py
-```
-3. Açılan pencerede "Resim Seç ve Tahmin Yap" butonuna tıklayın, bir görsel seçin ve sonucu görün.
+1. Gerekli Python paketlerini yükleyin:
+   ```
+   pip install -r requirements.txt
+   ```
+2. Flask sunucusunu başlatın:
+   ```
+   python app.py
+   ```
+3. Tarayıcıda `http://localhost:5000` adresine gidin.
 
-## Dosya Yapısı
-- `main.py` - Ana uygulama dosyası (GUI ve tahmin fonksiyonları)
-- `data.yaml` - Veri kümesi ayar dosyası (sadece eğitim için gerekli)
-- `yolov8n.pt` - (Opsiyonel) Temel YOLOv8 modeli
-- `runs/detect/train2/weights/best.pt` - Eğitilmiş model ağırlıkları
+## Klasörler ve Dosyalar
+- `app.py` : Ana Flask uygulaması
+- `templates/` : HTML şablonları (index, result, about)
+- `static/style.css` : (Varsa) ek stil dosyası
+- `static/istanbul.jpg` : Arka plan görseli
+- `static/uploads/` ve `static/results/` : Yüklenen ve tahmin edilen görseller (boş bırakılabilir)
+- `runs/detect/train2/weights/best.pt` : (Varsa) YOLO model dosyası
 
-## Notlar
-- Bu arayüz eğitim ve demo amaçlıdır.
-- Kendi modelinizi eğitip, ağırlık dosyasının yolunu kodda güncelleyerek kullanabilirsiniz.
+## Geliştirici
+**meryemnur pala**
+
+---
+> Not: Büyük veri/model dosyalarını yüklemeyin. Sadece kod ve arayüz dosyalarını ekleyin.
 
 ---
 
-**Hazırlayan:** Meryemnur Pala
+## 1. Terminali Aç ve plate-project Klasörüne Gir
+
+```sh
+cd "C:\\Users\\benme\\Desktop\\gyk ödevli kodlar\\gyk-computer-vision-master\\plate-project"
+```
+
+---
+
+## 2. (Varsa) Eski Git Geçmişini Temizle
+
+```sh
+rmdir /s /q .git
+```
+
+---
+
+## 3. Yeni Git Repo Başlat
+
+```sh
+git init
+```
+
+---
+
+## 4. Uzak Repo Ekle
+
+```sh
+git remote add origin https://github.com/meryemnurpala/Yolo_Interface_Plaka.git
+```
+
+---
+
+## 5. Sadece Gerekli Dosyaları Ekle
+
+```sh
+git add app.py templates static README.md
+```
+
+---
+
+## 6. Commit Yap
+
+```sh
+git commit -m "YOLO Plaka Tanıma Web Arayüzü ve Türkçe README"
+```
+
+---
+
+## 7. Ana Branch’i Ayarla
+
+```sh
+git branch -M main
+```
+
+---
+
+## 8. GitHub’a Yükle (Zorla, ilk yükleme için)
+
+```sh
+git push -f origin main
+```
+
+---
+
+### **Notlar:**
+- Eğer `requirements.txt` dosyan yoksa, Flask ve Ultralytics gibi temel gereksinimleri eklemen iyi olur.
+- Eğer `git` komutlarında hata alırsan, hatayı bana ilet, hemen çözüm bulayım.
+- Yükleme sonrası GitHub’da sadece şunlar olacak:  
+  - `app.py`, `templates/`, `static/`, `README.md`
+
+---
+
+**Yukarıdaki adımları uygularsan kesin olarak yüklenir. Hala sorun yaşarsan, aldığın hata mesajını bana ilet, adım adım birlikte çözelim!**

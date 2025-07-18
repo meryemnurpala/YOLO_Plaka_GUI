@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tespit Tamamlandı - Plaka Tanıma</title>
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- TailwindCSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            background: 
+                linear-gradient(135deg, rgba(237,234,255,0.18) 0%, rgba(224,236,255,0.18) 100%),
+                url('/static/istanbul.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .glass {
+            background: rgba(255,255,255,0.92);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 1.5rem;
+        }
+        .glass .text-gray-700, .glass .text-gray-800, .glass .font-semibold, .glass .font-bold, .glass label, .glass span, .glass h1, .glass h5 {
+            color: #232946 !important;
+        }
+        .glass .text-gray-500, .glass .text-gray-600 {
+            color: #444a5a !important;
+        }
+        .glass input, .glass button {
+            color: #232946;
+        }
+        .dark body {
+            background: 
+                linear-gradient(135deg, rgba(34,34,54,0.25) 0%, rgba(26,26,46,0.25) 100%),
+                url('/static/istanbul.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .dark .glass {
+            background: rgba(34,34,54,0.90);
+            color: #fff;
+        }
+        .dark .glass .text-gray-700, .dark .glass .text-gray-800, .dark .glass .font-semibold, .dark .glass .font-bold, .dark .glass label, .dark .glass span, .dark .glass h1, .dark .glass h5 {
+            color: #fff !important;
+        }
+        .dark .glass .text-gray-500, .dark .glass .text-gray-600 {
+            color: #e0e6f7 !important;
+        }
+        .dark .glass input, .dark .glass button {
+            color: #fff;
+        }
+        .dark .glass, .dark .summary-card, .dark .result-main-card, .dark .compare-card {
+            color: #fff !important;
+        }
+        .dark .glass .compare-title, .dark .glass .fw-bold, .dark .glass .icon, .dark .glass span, .dark .glass div, .dark .glass h1, .dark .glass h5, .dark .glass p {
+            color: #fff !important;
+            opacity: 1 !important;
+        }
+        .container-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 90vh;
+            width: 100%;
+            padding: 0;
+        }
+        .result-main-card {
+            width: 100%;
+            max-width: 900px;
+            margin: 1.5rem auto 0 auto;
+            padding: 1.2rem 2.5rem 1.2rem 2.5rem;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .summary-cards {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .summary-card {
+            background: rgba(255,255,255,0.85);
+            border-radius: 1.2rem;
+            box-shadow: 0 2px 12px rgba(106,17,203,0.10);
+            padding: 1.1rem 1rem;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #232946;
+        }
+        .summary-card.detected {
+            max-width: 90px;
+            min-width: 70px;
+            padding: 0.5rem 0.3rem;
+            font-size: 0.90rem;
+        }
+        @media (min-width: 600px) {
+            .summary-cards {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1.2rem;
+            }
+            .summary-card {
+                width: 220px;
+                min-width: 180px;
+                max-width: 220px;
+            }
+        }
+        .compare-card {
+            background: rgba(255,255,255,0.92);
+            border-radius: 1.5rem;
+            box-shadow: 0 2px 12px rgba(106,17,203,0.10);
+            padding: 1.5rem 1rem;
+            margin-top: 2.5rem;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .compare-row {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 2rem;
+        }
+        @media (max-width: 700px) {
+            .compare-row {
+                flex-direction: column;
+                gap: 1.2rem;
+                align-items: center;
+            }
+        }
+        .img-zoom {
+            max-width: 380px;
+            max-height: 280px;
+            border-radius: 1rem;
+            transition: transform 0.2s;
+            cursor: zoom-in;
+            box-shadow: 0 2px 8px rgba(106,17,203,0.10);
+        }
+        .img-zoom:active {
+            transform: scale(2.2);
+            z-index: 10;
+            position: relative;
+        }
+        .compare-title {
+            color: #232946;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 0.7rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            justify-content: center;
+        }
+        .dark .summary-card {
+            background: #232946;
+            color: #fff;
+        }
+    </style>
+    <script>
+      function toggleDarkMode() {
+        document.documentElement.classList.toggle('dark');
+        localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
+      }
+      window.onload = function() {
+        if(localStorage.getItem('darkMode') === 'true') {
+          document.documentElement.classList.add('dark');
+        }
+      }
+    </script>
+</head>
+<body class="flex flex-col min-h-screen">
+    <!-- Navbar -->
+    <nav class="w-full flex items-center justify-between px-4 py-3 glass mt-4 mx-auto max-w-4xl">
+        <div class="flex items-center gap-2">
+            <i class="fa-solid fa-car text-purple-600 text-2xl"></i>
+            <span class="font-bold text-lg md:text-xl tracking-wide text-gray-800 dark:text-white">Plaka Tanıma</span>
+        </div>
+        <div class="flex items-center gap-4">
+            <a href="/" class="text-gray-700 dark:text-gray-200 font-medium hover:text-purple-600 transition">Ana Sayfa</a>
+            <a href="/about" class="text-gray-700 dark:text-gray-200 font-medium hover:text-purple-600 transition">Hakkında</a>
+            <button onclick="toggleDarkMode()" class="ml-2 p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition" title="Dark Mode">
+                <i class="fa-solid fa-moon text-gray-500 dark:text-yellow-300"></i>
+            </button>
+        </div>
+    </nav>
+    <div class="container-center">
+        <div class="result-main-card glass">
+            <div class="mb-2">
+                <span style="font-size:2.2rem;">✔️</span>
+                <h1 class="fw-bold mt-2 mb-1 text-2xl">Tespit Tamamlandı</h1>
+                <div style="font-size:1.05rem; opacity:0.95;">Plaka tanıma işlemi başarıyla gerçekleştirildi</div>
+            </div>
+            <div class="summary-cards">
+                <div class="summary-card detected">
+                    <div class="icon">🔢</div>
+                    <div class="fw-bold" style="font-size:1rem;">{{ detected_count if detected_count is defined else 0 }}</div>
+                    <div style="font-size:0.85rem;">Tespit</div>
+                </div>
+                <div class="summary-card">
+                    <div class="icon">⚡</div>
+                    <div class="fw-bold" style="font-size:1.3rem;">Hızlı İşlem</div>
+                    <div style="font-size:0.95rem;">Ortalama 0.2 sn</div>
+                </div>
+                <div class="summary-card">
+                    <div class="icon">🛡️</div>
+                    <div class="fw-bold" style="font-size:1.3rem;">Güvenli</div>
+                    <div style="font-size:0.95rem;">%97+ doğruluk</div>
+                </div>
+                <div class="summary-card">
+                    <div class="icon">📈</div>
+                    <div class="fw-bold" style="font-size:1.3rem;">{{ detected_plate_count }}</div>
+                    <div style="font-size:0.95rem;">Toplam Tespit</div>
+                </div>
+            </div>
+        </div>
+        <div class="compare-card">
+            <div class="compare-row">
+                <div class="text-center">
+                    <div class="compare-title"><i class="fa-solid fa-image"></i> Orijinal Resim</div>
+                    <img src="/static/uploads/{{ result_image.replace('_result','') }}" alt="Orijinal" class="img-zoom">
+                </div>
+                <div class="text-center">
+                    <div class="compare-title"><i class="fa-solid fa-magnifying-glass"></i> Tespit Sonucu</div>
+                    <img src="/static/results/{{ result_image }}" alt="Sonuç" class="img-zoom">
+                </div>
+            </div>
+        </div>
+        <div class="mt-4 text-center">
+            <a href="/" class="btn btn-gradient">Yeni Resim Yükle</a>
+        </div>
+    </div>
+</body>
+</html> 

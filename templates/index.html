@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plaka Tahmin - YOLOv8</title>
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- TailwindCSS CDN (for demo, ideally use build in prod) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            background: 
+                linear-gradient(135deg, rgba(237,234,255,0.18) 0%, rgba(224,236,255,0.18) 100%),
+                url('/static/istanbul.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .glass {
+            background: rgba(255,255,255,0.92);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 1.5rem;
+        }
+        .glass .text-gray-700, .glass .text-gray-800, .glass .font-semibold, .glass .font-bold, .glass label, .glass span, .glass h1, .glass h5 {
+            color: #232946 !important;
+        }
+        .glass .text-gray-500, .glass .text-gray-600 {
+            color: #444a5a !important;
+        }
+        .glass input, .glass button {
+            color: #232946;
+        }
+        .dark body {
+            background: 
+                linear-gradient(135deg, rgba(34,34,54,0.25) 0%, rgba(26,26,46,0.25) 100%),
+                url('/static/istanbul.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .dark .glass {
+            background: rgba(34,34,54,0.90);
+            color: #fff;
+        }
+        .dark .glass .text-gray-700, .dark .glass .text-gray-800, .dark .glass .font-semibold, .dark .glass .font-bold, .dark .glass label, .dark .glass span, .dark .glass h1, .dark .glass h5 {
+            color: #fff !important;
+        }
+        .dark .glass .text-gray-500, .dark .glass .text-gray-600 {
+            color: #e0e6f7 !important;
+        }
+        .dark .glass input, .dark .glass button {
+            color: #fff;
+        }
+    </style>
+    <script>
+      // Basit dark mode toggle (localStorage ile)
+      function toggleDarkMode() {
+        document.documentElement.classList.toggle('dark');
+        localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
+      }
+      window.onload = function() {
+        if(localStorage.getItem('darkMode') === 'true') {
+          document.documentElement.classList.add('dark');
+        }
+      }
+    </script>
+</head>
+<body class="flex flex-col min-h-screen">
+    <!-- Navbar -->
+    <nav class="w-full flex items-center justify-between px-4 py-3 glass mt-4 mx-auto max-w-4xl">
+        <div class="flex items-center gap-2">
+            <i class="fa-solid fa-car text-purple-600 text-2xl"></i>
+            <span class="font-bold text-lg md:text-xl tracking-wide text-gray-800 dark:text-white">Plaka Tanıma</span>
+        </div>
+        <div class="flex items-center gap-4">
+            <a href="/" class="text-gray-700 dark:text-gray-200 font-medium hover:text-purple-600 transition">Ana Sayfa</a>
+            <a href="/about" class="text-gray-700 dark:text-gray-200 font-medium hover:text-purple-600 transition">Hakkında</a>
+            <button onclick="toggleDarkMode()" class="ml-2 p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition" title="Dark Mode">
+                <i class="fa-solid fa-moon text-gray-500 dark:text-yellow-300"></i>
+            </button>
+        </div>
+    </nav>
+    <!-- Sayaç Kartı -->
+    <div class="flex justify-center mt-8">
+        <div class="glass flex flex-col items-center px-8 py-4 shadow-lg rounded-xl w-full max-w-xs">
+            <div class="flex items-center gap-2 mb-1">
+                <i class="fa-solid fa-hashtag text-blue-500 text-xl"></i>
+                <span class="text-lg font-semibold text-gray-700 dark:text-gray-200">Toplam Tespit Edilen Plaka</span>
+            </div>
+            <div class="text-3xl font-bold text-purple-600 dark:text-purple-300">{{ detected_plate_count }}</div>
+        </div>
+    </div>
+    <!-- Ana Kart -->
+    <main class="flex-1 flex flex-col items-center justify-center px-2 py-6">
+        <div class="glass w-full max-w-md mx-auto p-8 rounded-xl shadow-xl mt-8">
+            <h1 class="text-2xl md:text-3xl font-bold text-center text-gray-800 dark:text-white mb-6">Plaka Tahmin Sistemi</h1>
+            <form method="POST" enctype="multipart/form-data" class="flex flex-col gap-4">
+                <div class="flex flex-col items-center">
+                    <label for="file" class="mb-2 text-gray-700 dark:text-gray-200 font-medium flex items-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-upload text-purple-500"></i> Bir resim seçin
+                    </label>
+                    <input class="hidden" type="file" id="file" name="file" accept="image/*" required onchange="previewImage(event)">
+                    <img id="preview" class="rounded-lg mt-2 max-w-[180px] max-h-[180px] shadow-md hidden" src="#" alt="Önizleme">
+                </div>
+                <button type="submit" class="bg-gradient-to-r from-purple-600 to-blue-500 text-white font-semibold py-3 rounded-lg shadow-md hover:bg-opacity-80 transition-all duration-200 flex items-center justify-center gap-2 text-lg">
+                    <i class="fa-solid fa-magnifying-glass"></i> Tahmin Yap
+                </button>
+            </form>
+        </div>
+        <!-- Özellikler kutucukları -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8 w-full max-w-4xl">
+            <div class="glass p-4 flex flex-col items-center text-center">
+                <i class="fa-solid fa-shield-halved text-purple-500 text-2xl mb-2"></i>
+                <span class="font-semibold text-gray-700 dark:text-gray-200">Güvenilirlik</span>
+                <span class="text-gray-600 dark:text-gray-300 text-sm">%97+ doğruluk oranı</span>
+            </div>
+            <div class="glass p-4 flex flex-col items-center text-center">
+                <i class="fa-solid fa-bolt text-blue-500 text-2xl mb-2"></i>
+                <span class="font-semibold text-gray-700 dark:text-gray-200">Hız</span>
+                <span class="text-gray-600 dark:text-gray-300 text-sm">Ortalama işlem süresi: 0.2 sn</span>
+            </div>
+            <div class="glass p-4 flex flex-col items-center text-center">
+                <i class="fa-solid fa-brain text-indigo-400 text-2xl mb-2"></i>
+                <span class="font-semibold text-gray-700 dark:text-gray-200">Model</span>
+                <span class="text-gray-600 dark:text-gray-300 text-sm">YOLOv8 Nano - Transfer Learning</span>
+            </div>
+            <div class="glass p-4 flex flex-col items-center text-center">
+                <i class="fa-solid fa-hand-pointer text-purple-400 text-2xl mb-2"></i>
+                <span class="font-semibold text-gray-700 dark:text-gray-200">Kullanım Kolaylığı</span>
+                <span class="text-gray-600 dark:text-gray-300 text-sm">Tek tıkla yükle &amp; tahmin al</span>
+            </div>
+            <div class="glass p-4 flex flex-col items-center text-center">
+                <i class="fa-solid fa-mobile-screen text-blue-400 text-2xl mb-2"></i>
+                <span class="font-semibold text-gray-700 dark:text-gray-200">Mobil Uyumlu</span>
+                <span class="text-gray-600 dark:text-gray-300 text-sm">Her cihazda sorunsuz çalışır</span>
+            </div>
+            <div class="glass p-4 flex flex-col items-center text-center">
+                <i class="fa-solid fa-code text-indigo-500 text-2xl mb-2"></i>
+                <span class="font-semibold text-gray-700 dark:text-gray-200">Açık Kaynak</span>
+                <span class="text-gray-600 dark:text-gray-300 text-sm">Kodlar tamamen erişilebilir</span>
+            </div>
+        </div>
+    </main>
+    <script>
+        function previewImage(event) {
+            var reader = new FileReader();
+            reader.onload = function(){
+                var output = document.getElementById('preview');
+                output.src = reader.result;
+                output.classList.remove('hidden');
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+</body>
+</html> 
