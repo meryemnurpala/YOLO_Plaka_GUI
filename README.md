@@ -6,7 +6,7 @@ Bu proje, YOLOv8 tabanlı araç plaka tanıma için modern ve kullanıcı dostu 
 - Flask tabanlı web sunucu
 - Modern ve responsive arayüz (TailwindCSS, FontAwesome, Poppins)
 - İstanbul arka planı ve karanlık mod desteği
-- Plaka tespiti sonrası görsel karşılaştırma
+- Plaka tespiti sonrası zoomlanabilir görsel karşılaştırma
 - Toplam tespit sayacı
 
 ## Kullanım
